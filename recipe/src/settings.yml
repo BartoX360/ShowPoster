@@ -3,9 +3,8 @@ name: ShowPoster
 strategy: polling
 polling_verb: get
 polling_url: |-
-  https://api.themoviedb.org/3/movie/upcoming?api_key={{ api_key | strip }}&language={% if language == 'fr' %}fr-FR{% else %}en-US{% endif %}&region={{ region | default: 'FR' }}&page=1
-  https://api.themoviedb.org/3/movie/upcoming?api_key={{ api_key | strip }}&language={% if language == 'fr' %}fr-FR{% else %}en-US{% endif %}&region={{ region | default: 'FR' }}&page=2
-  https://api.themoviedb.org/3/movie/now_playing?api_key={{ api_key | strip }}&language={% if language == 'fr' %}fr-FR{% else %}en-US{% endif %}&region={{ region | default: 'FR' }}&page=1
+  https://api.themoviedb.org/3/discover/tv?api_key={{ api_key | strip }}&language={% if language == 'fr' %}fr-FR{% else %}en-US{% endif %}&first_air_date.gte={{ 'now' | date: '%Y-%m-%d' }}&with_origin_country={{ origins | join: '|' | url_encode }}&without_genres=10763,10764,10766,10767&sort_by=popularity.desc
+  https://api.themoviedb.org/3/discover/tv?api_key={{ api_key | strip }}&language={% if language == 'fr' %}fr-FR{% else %}en-US{% endif %}&first_air_date.gte={{ 'now' | date: '%s' | minus: 5184000 | date: '%Y-%m-%d' }}&first_air_date.lte={{ 'now' | date: '%Y-%m-%d' }}&with_origin_country={{ origins | join: '|' | url_encode }}&without_genres=10763,10764,10766,10767&sort_by=popularity.desc
 polling_headers: ''
 refresh_interval: 60
 no_screen_padding: 'yes'
@@ -15,32 +14,40 @@ custom_fields:
 - keyname: about
   field_type: author_bio
   name: ShowPoster
-  description: "The next movies coming to theaters near you, and what is showing now, drawn as a poster. Data: The Movie Database (TMDB). / Les prochaines sorties au cinéma et les films à l'affiche, façon affiche."
+  description: "The next TV series premieres, and the new series that just started, drawn as a poster. Data: The Movie Database (TMDB). / Les prochaines séries et les nouveautés qui viennent de commencer, façon affiche."
 - keyname: api_key
   field_type: string
   name: TMDB API key / Clé d'API TMDB
   description: The "API Key" (v3) from your TMDB account settings, free.
   help_text: Create a free account on <a href="https://www.themoviedb.org/settings/api">themoviedb.org</a>, then copy the <b>API Key</b> (not the Read Access Token).
-- keyname: region
+- keyname: origins
   field_type: select
-  name: Country / Pays
-  description: Theatrical release dates of this country.
+  name: Countries of origin / Pays d'origine
+  description: Series made in any of the selected countries. Leave blank for all countries.
+  help_text: Hold <kbd>Ctrl</kbd> (Windows) or <kbd>Command</kbd> (Mac) to select several countries.
+  optional: true
+  multiple: true
   options:
+  - United States / États-Unis: US
+  - United Kingdom / Royaume-Uni: GB
   - France: FR
-  - Belgique: BE
-  - Suisse: CH
   - Canada: CA
-  - United States: US
-  - United Kingdom: GB
-  default: FR
+  - Belgium / Belgique: BE
+  - Spain / Espagne: ES
+  - Germany / Allemagne: DE
+  - Italy / Italie: IT
+  - Nordic / Pays nordiques: DK|SE|NO|FI|IS
+  - Australia / Australie: AU
+  - South Korea / Corée du Sud: KR
+  - Japan / Japon: JP
 - keyname: featured
   field_type: select
   name: Poster / Affiche
-  description: Which movies get the poster. Every hour the poster moves to another of the most awaited movies.
+  description: Which series get the poster. Every hour the poster moves to another of the most awaited series.
   options:
   - Rotate / Rotation: rotate
   - Coming soon / Prochainement: upcoming
-  - Now showing / À l'affiche: now
+  - New series / Nouveautés: now
   default: rotate
 - keyname: language
   field_type: select

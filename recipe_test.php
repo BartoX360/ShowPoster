@@ -7,16 +7,16 @@ use Carbon\Carbon;
 Plugin::where('name', 'ShowPoster (test)')->get()->each->delete();
 $file = new UploadedFile('/tmp/showposter.zip', 'showposter.zip', 'application/zip', null, true);
 $p = Plugin::find(app(PluginImportService::class)->importFromZip($file, User::find(1))->id);
-$base = ['api_key' => 'test', 'region' => 'FR'];
+$base = ['api_key' => 'test', 'origins' => ['US', 'GB', 'DK|SE|NO|FI|IS']];
 $p->update(['name' => 'ShowPoster (test)', 'configuration' => $base + ['style' => 'eink', 'language' => 'fr', 'featured' => 'rotate']]);
 echo "url=", str_replace("\n", "\nurl=", $p->resolveLiquidVariables($p->polling_url)), "\n";
 
-// Programme TMDB figé du 20 octobre 2026 (prochaines sorties p. 1 et 2, films à l'affiche)
+// Séries TMDB figées du 20 octobre 2026 (premières à venir, séries lancées depuis 60 jours), tous pays
 $feed = json_decode(file_get_contents('/tmp/test_payload.json'), true);
-$noimg = $feed; $noimg['IDX_0']['results'][0]['poster_path'] = null; $noimg['IDX_0']['results'][0]['backdrop_path'] = null;
-$err = ['IDX_0' => ['error' => 'Failed to fetch data'], 'IDX_1' => ['error' => 'Failed to fetch data'], 'IDX_2' => ['error' => 'Failed to fetch data']];
-$empty = ['IDX_0' => ['results' => []], 'IDX_1' => ['results' => []], 'IDX_2' => ['results' => []]];
-// heure UTC du 20/10 dont le créneau horaire vaut $k modulo 10 (rotation : rubrique = k % 2, rang = (k / 2) % 5)
+$noimg = $feed; foreach ($noimg['IDX_0']['results'] as &$s) { $s['poster_path'] = null; $s['backdrop_path'] = null; } unset($s);
+$err = ['IDX_0' => ['error' => 'Failed to fetch data'], 'IDX_1' => ['error' => 'Failed to fetch data']];
+$empty = ['IDX_0' => ['results' => []], 'IDX_1' => ['results' => []]];
+// heure UTC du 20/10 dont le créneau horaire vaut $k modulo 10 (rotation : rubrique = k % 2, rang = (k / 2) % 5, parmi les séries qui ont une affiche)
 $slot = fn($k) => (int) collect(range(0, 23))->first(fn($h) => intdiv(Carbon::create(2026, 10, 20, $h, 0, 0, 'UTC')->timestamp, 3600) % 10 == $k);
 // les formats réduits ne sont rendus qu'en e-ink : le mashup de l'écran couleur sort blanc dans LaraPaper
 $cases = [
@@ -41,7 +41,7 @@ $cases = [
 @mkdir('/tmp/spr'); array_map('unlink', glob('/tmp/spr/*.png'));
 foreach ($cases as [$name, $size, $mid, $style, $lang, $feat, $payload, $h, $key]) {
   Carbon::setTestNow(Carbon::create(2026, 10, 20, $h, 0, 0, 'UTC'));
-  $p->configuration = ['api_key' => $key, 'region' => 'FR', 'style' => $style, 'language' => $lang, 'featured' => $feat];
+  $p->configuration = ['api_key' => $key, 'style' => $style, 'language' => $lang, 'featured' => $feat];
   $p->data_payload = $payload; $p->saveQuietly();
   $model = DeviceModel::find($mid);
   $dev = new Device(['name' => 'test']); $dev->setRelation('deviceModel', $model);

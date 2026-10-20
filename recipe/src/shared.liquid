@@ -8,7 +8,7 @@
         --sky-h: 64%; --pad: 4.4cqw; --f-top: max(11px, 1.35cqw); --f-meta: max(12px, 1.45cqw);
         --f-title: 6.2cqw; --f-sub: max(12px, 1.5cqw); --stamp: min(10.5cqw, 17cqh); --shadow: max(6px, .8cqw);
         background: var(--bg); color: var(--ink); font-family: 'IBM Plex Mono', ui-monospace, monospace; }
-  /* une couleur de ciel par rubrique : crépuscule des avant-premières, projecteurs dorés de l'affiche */
+  /* une couleur de ciel par rubrique : crépuscule des avant-premières, projecteurs dorés des nouveautés */
   .sp--sec-upcoming { --sky: #ee9977; --ray: #ffbf80; --top: #442233; }
   .sp--sec-now { --sky: #ffcc44; --ray: #ffcc88; --top: #442233; }
   .sp.sp--eink { --bg: #ffffff; --ink: #000000; --muted: #000000; --sky: #ffffff; --ray: url(#sp-dots); --top: #000000;
@@ -22,9 +22,9 @@
   .sp-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .sp--eink .sp-frame img { filter: grayscale(1) brightness(1.15) contrast(1.15); }
   .sp--img .sp-frame { visibility: visible; }
-  .sp-clap { display: none; width: 72%; height: 92%; }
+  .sp-tv { display: none; width: 72%; height: 92%; }
   .sp--noimg .sp-frame { display: none; }
-  .sp--noimg .sp-clap { display: block; }
+  .sp--noimg .sp-tv { display: block; }
   .sp-tag { position: absolute; left: calc(-1 * var(--shadow)); top: calc(-1.4 * var(--shadow)); padding: .25em .6em;
             background: var(--ink); color: var(--bg); font-size: var(--f-top); letter-spacing: .2em; text-transform: uppercase;
             white-space: nowrap; }
@@ -92,11 +92,10 @@
 {% template showposter %}
 <div class="sp sp--{{ size }}{% if cf.style == 'color' %} sp--color{% else %} sp--eink{% endif %}"
      data-lang="{{ cf.language | default: 'en' }}" data-featured="{{ cf.featured | default: 'rotate' }}"
-     data-region="{{ cf.region | default: 'FR' }}" data-key="{% if cf.api_key != blank %}1{% endif %}"
-     data-error="{% if up1.error or up1.status_message or now.error or now.status_message %}1{% endif %}"
+     data-key="{% if cf.api_key != blank %}1{% endif %}"
+     data-error="{% if up.error or up.status_message or now.error or now.status_message %}1{% endif %}"
      data-ts="{{ ts }}" data-off="{{ off | default: 0 }}">
-  <script type="application/json" class="sp-up1">{{ up1.results | json }}</script>
-  <script type="application/json" class="sp-up2">{{ up2.results | json }}</script>
+  <script type="application/json" class="sp-up">{{ up.results | json }}</script>
   <script type="application/json" class="sp-now">{{ now.results | json }}</script>
   <div class="sp-sky">
     <svg class="sp-rays" viewBox="0 0 1280 540" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -108,19 +107,18 @@
       </defs>
       <g class="sp-rays-g" style="fill:var(--ray)"></g>
     </svg>
-    <!-- l'affiche du film, cernée de noir comme les jaquettes de GamePoster ; un clap si elle manque -->
+    <!-- l'affiche de la série, cernée de noir comme les jaquettes de GamePoster ; un téléviseur si elle manque -->
     <div class="sp-art">
       <div class="sp-frame"><img class="sp-cover" alt=""><span class="sp-tag"></span></div>
-      <svg class="sp-clap" viewBox="-20 -10 440 360" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-        <g transform="rotate(-14 30 118)">
-          <rect x="30" y="64" width="340" height="54" style="fill:var(--pad-fill);stroke:var(--ink)" stroke-width="10" stroke-linejoin="round"/>
-          <path d="M70 64 L110 64 L80 118 L40 118 Z M170 64 L210 64 L180 118 L140 118 Z M270 64 L310 64 L280 118 L240 118 Z" style="fill:var(--ink)"/>
-        </g>
-        <rect x="30" y="122" width="340" height="54" style="fill:var(--pad-fill);stroke:var(--ink)" stroke-width="10" stroke-linejoin="round"/>
-        <path d="M70 122 L110 122 L80 176 L40 176 Z M170 122 L210 122 L180 176 L140 176 Z M270 122 L310 122 L280 176 L240 176 Z" style="fill:var(--ink)"/>
-        <rect x="30" y="176" width="340" height="150" style="fill:var(--pad-fill);stroke:var(--ink)" stroke-width="10" stroke-linejoin="round"/>
-        <path d="M62 222 H338 M62 266 H200 M240 266 H338" style="stroke:var(--ink)" stroke-width="8" stroke-linecap="round"/>
-        <circle cx="30" cy="122" r="13" style="fill:var(--accent);stroke:var(--ink)" stroke-width="6"/>
+      <svg class="sp-tv" viewBox="0 0 440 360" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <path d="M160 20 L216 84 L292 12" style="fill:none;stroke:var(--ink)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="30" y="84" width="380" height="236" rx="34" style="fill:var(--pad-fill);stroke:var(--ink)" stroke-width="10"/>
+        <rect x="62" y="114" width="250" height="176" rx="26" style="fill:var(--ink)"/>
+        <path d="M92 148 Q100 136 116 134" style="fill:none;stroke:var(--pad-fill)" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="362" cy="148" r="20" style="fill:var(--accent);stroke:var(--ink)" stroke-width="6"/>
+        <circle cx="362" cy="206" r="14" style="fill:var(--pad-fill);stroke:var(--ink)" stroke-width="6"/>
+        <path d="M340 248 H384 M340 270 H384" style="stroke:var(--ink)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M90 320 L76 346 M350 320 L364 346" style="stroke:var(--ink)" stroke-width="10" stroke-linecap="round"/>
       </svg>
     </div>
     <div class="sp-top">
@@ -148,52 +146,64 @@
 (function () {
   var IMG = 'https://image.tmdb.org/t/p/w780';
   var GENRES = {
-    fr: { 28: 'Action', 12: 'Aventure', 16: 'Animation', 35: 'Comédie', 80: 'Policier', 99: 'Documentaire', 18: 'Drame',
-          10751: 'Familial', 14: 'Fantastique', 36: 'Histoire', 27: 'Horreur', 10402: 'Musique', 9648: 'Mystère',
-          10749: 'Romance', 878: 'Science-fiction', 10770: 'Téléfilm', 53: 'Thriller', 10752: 'Guerre', 37: 'Western' },
-    en: { 28: 'Action', 12: 'Adventure', 16: 'Animation', 35: 'Comedy', 80: 'Crime', 99: 'Documentary', 18: 'Drama',
-          10751: 'Family', 14: 'Fantasy', 36: 'History', 27: 'Horror', 10402: 'Music', 9648: 'Mystery',
-          10749: 'Romance', 878: 'Science Fiction', 10770: 'TV Movie', 53: 'Thriller', 10752: 'War', 37: 'Western' }
+    fr: { 10759: 'Action & Aventure', 16: 'Animation', 35: 'Comédie', 80: 'Policier', 99: 'Documentaire', 18: 'Drame',
+          10751: 'Familial', 10762: 'Jeunesse', 9648: 'Mystère', 10765: 'Science-fiction & Fantastique',
+          10768: 'Guerre & Politique', 37: 'Western' },
+    en: { 10759: 'Action & Adventure', 16: 'Animation', 35: 'Comedy', 80: 'Crime', 99: 'Documentary', 18: 'Drama',
+          10751: 'Family', 10762: 'Kids', 9648: 'Mystery', 10765: 'Sci-Fi & Fantasy', 10768: 'War & Politics', 37: 'Western' }
   };
   var I18N = {
     fr: {
-      upcoming: 'Prochainement', now: 'À l\'affiche',
-      countries: { FR: 'France', BE: 'Belgique', CH: 'Suisse', CA: 'Canada', US: 'États-Unis', GB: 'Royaume-Uni' },
+      series: 'Séries', upcoming: 'Prochainement', now: 'Nouveautés',
+      countries: { US: 'américaine', GB: 'britannique', FR: 'française', CA: 'canadienne', BE: 'belge', ES: 'espagnole',
+                   DE: 'allemande', IT: 'italienne', DK: 'danoise', SE: 'suédoise', NO: 'norvégienne', FI: 'finlandaise',
+                   IS: 'islandaise', AU: 'australienne', KR: 'coréenne', JP: 'japonaise', CN: 'chinoise', IN: 'indienne',
+                   MX: 'mexicaine', BR: 'brésilienne', AR: 'argentine', NZ: 'néo-zélandaise', IE: 'irlandaise',
+                   NL: 'néerlandaise', PL: 'polonaise', TR: 'turque', TW: 'taïwanaise', TH: 'thaïlandaise', CH: 'suisse' },
+      nation: function (c) { return 'Série ' + c; },
       updated: 'Dernière actualisation à ', upd: 'Màj ',
       days: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
       months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
       mshort: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
       date: function (d, m, n) { return d + ' ' + (n === 1 ? '1er' : n) + ' ' + m; },
       dshort: function (m, n) { return (n === 1 ? '1er' : n) + ' ' + m; },
-      ago: function (n) { return n === 0 ? 'Sorti aujourd\'hui' : n === 1 ? 'Sorti hier' : 'Sorti il y a ' + n + ' jours'; },
-      out: function (n) { return n === 0 ? 'Sort aujourd\'hui' : n === 1 ? 'Sort demain' : 'Sort dans ' + n + ' jours'; },
-      orig: 'VO : ', then: 'Ensuite : ', also: 'Aussi à l\'affiche : ', tagNew: 'Nouveau', tagWeek: 'Cette semaine',
-      score: 'Note', critic: 'TMDB', unrated: 'Pas encore noté', outIn: 'Sortie', day: 'jour', daysW: 'jours', today: 'Auj.',
+      ago: function (n) { return n === 0 ? 'Lancée aujourd\'hui' : n === 1 ? 'Lancée hier' : 'Lancée il y a ' + n + ' jours'; },
+      out: function (n) { return n === 0 ? 'Commence aujourd\'hui' : n === 1 ? 'Commence demain' : 'Commence dans ' + n + ' jours'; },
+      orig: 'VO : ', then: 'Ensuite : ', also: 'Aussi nouveau : ', tagNew: 'Nouveau', tagWeek: 'Cette semaine',
+      score: 'Note', critic: 'TMDB', unrated: 'Pas encore notée', outIn: 'Première', day: 'jour', daysW: 'jours', today: 'Auj.',
       emptyMeta: 'Rien à afficher', offlineMeta: 'Programme indisponible', offline: 'Hors ligne',
       noFeed: 'Impossible de joindre TMDB pour le moment. Vérifiez la clé d\'API.',
       keyMeta: 'Réglage manquant', key: 'Clé TMDB', keyTxt: 'Renseignez votre clé d\'API TMDB (gratuite) dans les réglages du plugin.',
-      empty: 'Aucun film', emptyTxt: 'Aucune sortie prévue dans ce pays pour le moment.'
+      empty: 'Aucune série', emptyTxt: 'Aucune nouvelle série des pays choisis pour le moment.'
     },
     en: {
-      upcoming: 'Coming soon', now: 'Now showing',
-      countries: { FR: 'France', BE: 'Belgium', CH: 'Switzerland', CA: 'Canada', US: 'United States', GB: 'United Kingdom' },
+      series: 'Series', upcoming: 'Coming soon', now: 'New',
+      countries: { US: 'American', GB: 'British', FR: 'French', CA: 'Canadian', BE: 'Belgian', ES: 'Spanish',
+                   DE: 'German', IT: 'Italian', DK: 'Danish', SE: 'Swedish', NO: 'Norwegian', FI: 'Finnish',
+                   IS: 'Icelandic', AU: 'Australian', KR: 'Korean', JP: 'Japanese', CN: 'Chinese', IN: 'Indian',
+                   MX: 'Mexican', BR: 'Brazilian', AR: 'Argentine', NZ: 'New Zealand', IE: 'Irish',
+                   NL: 'Dutch', PL: 'Polish', TR: 'Turkish', TW: 'Taiwanese', TH: 'Thai', CH: 'Swiss' },
+      nation: function (c) { return c + ' series'; },
       updated: 'Last updated at ', upd: 'Upd. ',
       days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       mshort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       date: function (d, m, n) { return d + ', ' + m + ' ' + n; },
       dshort: function (m, n) { return m + ' ' + n; },
-      ago: function (n) { return n === 0 ? 'Released today' : n === 1 ? 'Released yesterday' : 'Released ' + n + ' days ago'; },
-      out: function (n) { return n === 0 ? 'Out today' : n === 1 ? 'Out tomorrow' : 'Out in ' + n + ' days'; },
-      orig: 'Original title: ', then: 'Next: ', also: 'Also showing: ', tagNew: 'New', tagWeek: 'This week',
-      score: 'Score', critic: 'TMDB', unrated: 'Not rated yet', outIn: 'Out in', day: 'day', daysW: 'days', today: 'Today',
+      ago: function (n) { return n === 0 ? 'Premiered today' : n === 1 ? 'Premiered yesterday' : 'Premiered ' + n + ' days ago'; },
+      out: function (n) { return n === 0 ? 'Premieres today' : n === 1 ? 'Premieres tomorrow' : 'Premieres in ' + n + ' days'; },
+      orig: 'Original title: ', then: 'Next: ', also: 'Also new: ', tagNew: 'New', tagWeek: 'This week',
+      score: 'Score', critic: 'TMDB', unrated: 'Not rated yet', outIn: 'Premiere', day: 'day', daysW: 'days', today: 'Today',
       emptyMeta: 'Nothing to show', offlineMeta: 'Schedule unavailable', offline: 'Offline',
       noFeed: 'Unable to reach TMDB right now. Check the API key.',
       keyMeta: 'Missing setting', key: 'TMDB key', keyTxt: 'Enter your (free) TMDB API key in the plugin settings.',
-      empty: 'No movies', emptyTxt: 'No release planned in this country for now.'
+      empty: 'No series', emptyTxt: 'No new series from the selected countries for now.'
     }
   };
 
+  // Les polices n'ont que l'alphabet latin : un titre en coréen, en japonais… s'afficherait mal
+  var LATIN = /^[\u0000-\u024f\u2000-\u206f\u2100-\u214f]*$/;
+  function latin(x) { return LATIN.test(x || ''); }
   function json(el) { try { return JSON.parse(el.textContent); } catch (e) { return null; } }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   // Titre : d'abord réduit sur une ligne, puis sur deux lignes s'il est encore trop long
@@ -217,42 +227,45 @@
     q('.sp-upd-short').textContent = t.upd;
     q('.sp-time').textContent = new Date((ts + off) * 1000).toISOString().substr(11, 5);
 
-    // Jours entiers entre aujourd'hui (heure locale) et la date de sortie
+    // Jours entiers entre aujourd'hui (heure locale) et la diffusion du premier épisode
     var today = Math.floor((ts + off) / 86400);
-    var dayOf = function (m) { return m.release_date ? Math.floor(Date.parse(m.release_date.substr(0, 10) + 'T00:00:00Z') / 864e5) : null; };
-    var when = function (m, long) {
-      var dt = new Date(dayOf(m) * 864e5);
+    var dayOf = function (s) { return s.first_air_date ? Math.floor(Date.parse(s.first_air_date.substr(0, 10) + 'T00:00:00Z') / 864e5) : null; };
+    var when = function (s, long) {
+      var dt = new Date(dayOf(s) * 864e5);
       return long ? t.date(t.days[dt.getUTCDay()], t.months[dt.getUTCMonth()], dt.getUTCDate())
                   : t.dshort(t.mshort[dt.getUTCMonth()], dt.getUTCDate());
     };
 
-    // TMDB mêle aux sorties des reprises et des films déjà sortis : on ne garde que les vraies dates à venir,
-    // et à l'affiche, les films sortis depuis moins de trois mois (sans doublon entre les deux pages)
+    // Le flux est relevé une fois l'heure : on recale les deux listes sur la date du jour, sans doublon
     var seen = {};
     var keep = function (list, ok) {
-      return (list || []).filter(function (m) {
-        var d = m && m.title && dayOf(m);
-        if (d == null || !ok(d) || seen[m.id]) return false;
-        return (seen[m.id] = true);
+      return (list || []).filter(function (s) {
+        var d = s && s.name && dayOf(s);
+        if (d == null || !ok(d) || seen[s.id]) return false;
+        return (seen[s.id] = true);
       });
     };
     var lists = {
-      upcoming: keep((json(q('.sp-up1')) || []).concat(json(q('.sp-up2')) || []), function (d) { return d >= today; }),
-      now: keep(json(q('.sp-now')), function (d) { return d < today && d >= today - 90; })
+      upcoming: keep(json(q('.sp-up')), function (d) { return d >= today; }),
+      now: keep(json(q('.sp-now')), function (d) { return d < today && d >= today - 60; })
     };
 
-    // Rubrique et film à l'affiche : chaque heure, un autre des cinq films les plus attendus ou les plus vus
+    // Rubrique et série à l'affiche : chaque heure, une autre des cinq séries les plus attendues ou les plus suivies,
+    // en privilégiant celles qui ont déjà une affiche et un titre lisible
+    var top = function (list) {
+      var withArt = list.filter(function (s) { return s.poster_path && latin(s.name); });
+      return (withArt.length ? withArt : list).slice(0, 5);
+    };
     var secs = ['upcoming', 'now'].filter(function (s) { return lists[s].length; });
     var sec = root.dataset.featured, slot = Math.floor(ts / 3600), idx;
-    if (lists[sec] && lists[sec].length) idx = slot % Math.min(5, lists[sec].length);
+    if (lists[sec] && lists[sec].length) idx = slot % top(lists[sec]).length;
     else {
       sec = secs[slot % (secs.length || 1)];
-      if (sec) idx = Math.floor(slot / secs.length) % Math.min(5, lists[sec].length);
+      if (sec) idx = Math.floor(slot / secs.length) % top(lists[sec]).length;
     }
     root.classList.add('sp--sec-' + (sec || 'upcoming'));
     rays(root);
-    var country = t.countries[root.dataset.region] || root.dataset.region;
-    q('.sp-k').textContent = (sec === 'now' ? t.now : t.upcoming) + ' · ' + country;
+    q('.sp-k').textContent = t.series + ' · ' + (sec === 'now' ? t.now : t.upcoming);
 
     if (!sec) {
       var nokey = !root.dataset.key, down = !!root.dataset.error;
@@ -265,34 +278,35 @@
       return fit(q('.sp-title'));
     }
 
-    var list = lists[sec], m = list[idx], left = today - dayOf(m);
-    cover(root, m.poster_path || m.backdrop_path);
-    q('.sp-title').textContent = m.title;
+    var list = lists[sec], s = top(list)[idx], left = today - dayOf(s);
+    cover(root, s.poster_path || s.backdrop_path);
+    q('.sp-title').textContent = s.name;
 
     if (sec === 'now') {
-      q('.sp-meta').textContent = t.ago(left) + ' · ' + when(m, true);
+      q('.sp-meta').textContent = t.ago(left) + ' · ' + when(s, true);
       if (left <= 7) q('.sp-tag').textContent = t.tagNew;
     } else {
-      q('.sp-meta').textContent = t.out(-left) + ' · ' + when(m, true);
+      q('.sp-meta').textContent = t.out(-left) + ' · ' + when(s, true);
       if (-left <= 6) q('.sp-tag').textContent = t.tagWeek;
     }
 
-    var genres = (m.genre_ids || []).map(function (g) { return GENRES[lang][g]; }).filter(Boolean).slice(0, 3);
-    // titre original seulement s'il diffère et s'écrit en alphabet latin (les polices n'ont pas le coréen, le japonais…)
-    var latin = /^[\u0000-ɏ -⁯]*$/.test(m.original_title || '');
-    var bare = function (s) { return String(s || '').toLowerCase().replace(/[^a-z0-9À-ɏ]/g, ''); };
-    var orig = latin && m.original_title && bare(m.original_title) !== bare(m.title) ? t.orig + '<b>' + esc(m.original_title) + '</b>' : '';
-    q('.sp-genres').innerHTML = genres.concat(orig ? [orig] : []).join(' · ');
+    // Pays d'origine, genres, et titre original s'il diffère et reste lisible
+    var genres = (s.genre_ids || []).map(function (g) { return GENRES[lang][g]; }).filter(Boolean).slice(0, 2);
+    var c = t.countries[(s.origin_country || [])[0]];
+    var bare = function (x) { return String(x || '').toLowerCase().replace(/[^a-z0-9À-ɏ]/g, ''); };
+    var parts = (c ? ['<b>' + t.nation(c) + '</b>'] : []).concat(genres);
+    if (latin(s.original_name) && s.original_name && bare(s.original_name) !== bare(s.name)) parts.push(t.orig + esc(s.original_name));
+    q('.sp-genres').innerHTML = parts.join(' · ');
 
-    // Ensuite : les prochaines sorties dans l'ordre du calendrier ; à l'affiche : les autres films avec leur note
-    var others = list.filter(function (o) { return o !== m; });
+    // Ensuite : les prochaines premières dans l'ordre du calendrier ; nouveautés : les autres séries avec leur note
+    var others = list.filter(function (o) { return o !== s && latin(o.name); });
     if (sec === 'upcoming') others.sort(function (a, b) { return dayOf(a) - dayOf(b); });
     q('.sp-next').innerHTML = others.length ? (sec === 'now' ? t.also : t.then) + others.slice(0, 4).map(function (o) {
       var r = rating(o);
-      return esc(o.title) + (sec === 'now' ? (r ? ' <b>' + r + '</b>' : '') : ' <b>' + when(o, false) + '</b>');
+      return esc(o.name) + (sec === 'now' ? (r ? ' <b>' + r + '</b>' : '') : ' <b>' + when(o, false) + '</b>');
     }).join(' · ') : '';
 
-    // Tampon : le compte à rebours avant la sortie, ou la note des spectateurs TMDB
+    // Tampon : le compte à rebours avant la première, ou la note des spectateurs TMDB
     var ring = q('.sp-ring');
     if (sec === 'upcoming') {
       var n = -left;
@@ -301,7 +315,7 @@
       if (n === 0) ring.classList.add('word'); else if (n > 99) ring.classList.add('long');
       q('.sp-stamp-l').textContent = n === 0 ? '' : n === 1 ? t.day : t.daysW;
     } else {
-      var r = rating(m);
+      var r = rating(s);
       q('.sp-stamp-k').textContent = t.score;
       ring.textContent = r || '—';
       if (!r) ring.classList.add('none'); else if (r.length > 2) ring.classList.add('long');
@@ -311,7 +325,7 @@
   }
 
   // Note sur 100, seulement quand assez de spectateurs ont voté
-  function rating(m) { return m.vote_count >= 10 && m.vote_average ? String(Math.round(m.vote_average * 10)) : ''; }
+  function rating(s) { return s.vote_count >= 10 && s.vote_average ? String(Math.round(s.vote_average * 10)) : ''; }
 
   // Affiche cadrée à son format d'origine dans la zone du ciel
   function cover(root, path) {
@@ -330,7 +344,7 @@
     if (img.complete && img.naturalWidth) place();
   }
 
-  // Faisceaux de projecteurs derrière l'affiche, façon générique de film
+  // Faisceaux de projecteurs derrière l'affiche, façon générique
   function rays(root) {
     var NS = 'http://www.w3.org/2000/svg', g = root.querySelector('.sp-rays-g'), cx = 640, cy = 300, n = 18, r = 1600;
     for (var i = 0; i < n; i++) {
