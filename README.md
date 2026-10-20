@@ -79,7 +79,6 @@ No server to install: the premieres come from the [Trakt](https://trakt.tv) cale
 - Trakt does not allow hotlinking its images, hence the posters from TMDB, which does.
 - On e-ink, posters are turned to grayscale and dithered by the renderer.
 - Titles not written in the Latin alphabet are left out, as the fonts cannot draw them.
-- In LaraPaper, the half and quadrant layouts render blank on the color (Echo Show) screen model, for every Poster plugin: they are tested on e-ink only.
 - This product uses the TMDB API but is not endorsed or certified by TMDB.
 
 ---
@@ -143,5 +142,4 @@ Aucun serveur à installer : les premières viennent du calendrier de [Trakt](ht
 - Trakt interdit de charger ses images en direct, d'où les affiches de TMDB, qui l'autorise.
 - En e-ink, les affiches passent en niveaux de gris, tramés par le moteur de rendu.
 - Les titres qui ne s'écrivent pas en alphabet latin sont écartés, faute de glyphes dans les polices.
-- Dans LaraPaper, les formats demi et quart d'écran sortent blancs sur le modèle d'écran couleur (Echo Show), pour tous les plugins Poster : ils ne sont testés qu'en e-ink.
 - Ce produit utilise l'API TMDB mais n'est ni approuvé ni certifié par TMDB.

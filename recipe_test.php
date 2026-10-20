@@ -21,7 +21,6 @@ $err = ['IDX_0' => ['error' => 'Failed to fetch data'], 'IDX_1' => ['error' => '
 $empty = ['IDX_0' => ['data' => []], 'IDX_1' => ['data' => []]];
 // heure UTC du 20/10 dont le créneau horaire vaut $k modulo 10 (rotation : rubrique = k % 2, rang = (k / 2) % 5)
 $slot = fn($k) => (int) collect(range(0, 23))->first(fn($h) => intdiv(Carbon::create(2026, 10, 20, $h, 0, 0, 'UTC')->timestamp, 3600) % 10 == $k);
-// les formats réduits ne sont rendus qu'en e-ink : le mashup de l'écran couleur sort blanc dans LaraPaper
 $cases = [
   // nom, taille, modèle, style, langue, affiche, données, heure (UTC), clé Trakt, clé TMDB
   ['fr_color_seasons', 'full', 55, 'color', 'fr', 'seasons', $feed, $slot(0), 'k', $tmdb],
@@ -37,6 +36,9 @@ $cases = [
   ['fr_hv', 'half_vertical', 1, 'eink', 'fr', 'seasons', $feed, $slot(3), 'k', $tmdb],
   ['en_q', 'quadrant', 1, 'eink', 'en', 'series', $feed, $slot(0), 'k', $tmdb],
   ['fr_q', 'quadrant', 1, 'eink', 'fr', 'seasons', $feed, $slot(0), 'k', $tmdb],
+  ['fr_color_hh', 'half_horizontal', 55, 'color', 'fr', 'seasons', $feed, $slot(0), 'k', $tmdb],
+  ['en_color_hv', 'half_vertical', 55, 'color', 'en', 'series', $feed, $slot(0), 'k', $tmdb],
+  ['fr_color_q', 'quadrant', 55, 'color', 'fr', 'series', $feed, $slot(1), 'k', $tmdb],
   ['fr_error', 'full', 1, 'eink', 'fr', 'rotate', $err, 10, 'k', $tmdb],
   ['fr_nokey', 'full', 55, 'color', 'fr', 'rotate', $err, 10, '', $tmdb],
   ['en_empty', 'full', 55, 'color', 'en', 'rotate', $empty, 10, 'k', $tmdb],

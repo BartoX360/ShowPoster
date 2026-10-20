@@ -2,6 +2,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=IBM+Plex+Mono:wght@400;500;600&display=block" rel="stylesheet">
 <style>
   .view:has(> .sp) { position: relative; padding: 0; overflow: hidden; }
+  /* mashups des écrans gris et couleur : le framework y met les vues à z-index -2, ce qui une fois
+     la vue positionnée la ferait passer sous le fond de l'écran (rendu tout blanc) */
+  .trmnl .screen .mashup .view:has(> .sp) { z-index: 0; }
   .sp { position: absolute; inset: 0; overflow: hidden; container-type: size;
         --bg: #f2eee6; --ink: #111111; --muted: #444455; --sky: #ee9977; --ray: #ffbf80; --top: #442233;
         --accent: #dd2233; --on-accent: #ffffff; --pad-fill: #ffffff;
@@ -216,6 +219,8 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   // Titre : d'abord réduit sur une ligne, puis sur deux lignes s'il est encore trop long
   function fit(el) {
+    // la ponctuation haute française ne doit pas passer seule à la ligne
+    el.textContent = el.textContent.replace(/ ([:;!?])/g, '\u00a0$1');
     el.style.fontSize = ''; el.classList.remove('wrap');
     var base = parseFloat(getComputedStyle(el).fontSize), size = base;
     var shrink = function () { size *= 0.94; el.style.fontSize = size + 'px'; };
