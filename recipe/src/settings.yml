@@ -3,9 +3,11 @@ name: ShowPoster
 strategy: polling
 polling_verb: get
 polling_url: |-
-  https://api.themoviedb.org/3/discover/tv?api_key={{ api_key | strip }}&language={% if language == 'fr' %}fr-FR{% else %}en-US{% endif %}&first_air_date.gte={{ 'now' | date: '%Y-%m-%d' }}&with_origin_country={{ origins | join: '|' | url_encode }}&without_genres=10763,10764,10766,10767&sort_by=popularity.desc
-  https://api.themoviedb.org/3/discover/tv?api_key={{ api_key | strip }}&language={% if language == 'fr' %}fr-FR{% else %}en-US{% endif %}&first_air_date.gte={{ 'now' | date: '%s' | minus: 5184000 | date: '%Y-%m-%d' }}&first_air_date.lte={{ 'now' | date: '%Y-%m-%d' }}&with_origin_country={{ origins | join: '|' | url_encode }}&without_genres=10763,10764,10766,10767&sort_by=popularity.desc
-polling_headers: ''
+  https://api.trakt.tv/calendars/all/shows/premieres/{{ 'now' | date: '%Y-%m-%d' }}/33?extended=full&countries={{ origins | join: ',' | url_encode }}
+  https://api.trakt.tv/shows/anticipated?limit=100
+polling_headers: |-
+  trakt-api-key={{ trakt_id | strip }}
+  trakt-api-version=2
 refresh_interval: 60
 no_screen_padding: 'yes'
 dark_mode: 'no'
@@ -14,12 +16,18 @@ custom_fields:
 - keyname: about
   field_type: author_bio
   name: ShowPoster
-  description: "The next TV series premieres, and the new series that just started, drawn as a poster. Data: The Movie Database (TMDB). / Les prochaines séries et les nouveautés qui viennent de commencer, façon affiche."
-- keyname: api_key
+  description: "The next new seasons and new series on TV and streaming, drawn as a poster. Data: Trakt; posters: The Movie Database (TMDB). / Les prochaines saisons et nouvelles séries, à la télé et en streaming, façon affiche."
+- keyname: trakt_id
+  field_type: string
+  name: Trakt Client ID
+  description: The Client ID of a (free) Trakt API app.
+  help_text: On <a href="https://trakt.tv/oauth/applications/new">trakt.tv</a>, create an app with any redirect URI (e.g. http://localhost/callback), then copy its <b>Client ID</b>.
+- keyname: tmdb_key
   field_type: string
   name: TMDB API key / Clé d'API TMDB
-  description: The "API Key" (v3) from your TMDB account settings, free.
-  help_text: Create a free account on <a href="https://www.themoviedb.org/settings/api">themoviedb.org</a>, then copy the <b>API Key</b> (not the Read Access Token).
+  description: Optional. For the posters and the French titles; without it, a TV set is drawn.
+  help_text: The <b>API Key</b> (v3) from your free account on <a href="https://www.themoviedb.org/settings/api">themoviedb.org</a>.
+  optional: true
 - keyname: origins
   field_type: select
   name: Countries of origin / Pays d'origine
@@ -28,26 +36,26 @@ custom_fields:
   optional: true
   multiple: true
   options:
-  - United States / États-Unis: US
-  - United Kingdom / Royaume-Uni: GB
-  - France: FR
-  - Canada: CA
-  - Belgium / Belgique: BE
-  - Spain / Espagne: ES
-  - Germany / Allemagne: DE
-  - Italy / Italie: IT
-  - Nordic / Pays nordiques: DK|SE|NO|FI|IS
-  - Australia / Australie: AU
-  - South Korea / Corée du Sud: KR
-  - Japan / Japon: JP
+  - United States / États-Unis: us
+  - United Kingdom / Royaume-Uni: gb
+  - France: fr
+  - Canada: ca
+  - Belgium / Belgique: be
+  - Spain / Espagne: es
+  - Germany / Allemagne: de
+  - Italy / Italie: it
+  - Nordic / Pays nordiques: dk,se,no,fi,is
+  - Australia / Australie: au
+  - South Korea / Corée du Sud: kr
+  - Japan / Japon: jp
 - keyname: featured
   field_type: select
   name: Poster / Affiche
-  description: Which series get the poster. Every hour the poster moves to another of the most awaited series.
+  description: Which series get the poster. Every hour the poster moves to another of the most followed or most awaited series.
   options:
   - Rotate / Rotation: rotate
-  - Coming soon / Prochainement: upcoming
-  - New series / Nouveautés: now
+  - New seasons / Nouvelles saisons: seasons
+  - New series / Nouvelles séries: series
   default: rotate
 - keyname: language
   field_type: select
