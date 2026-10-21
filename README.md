@@ -39,6 +39,9 @@ No server to install: the premieres come from the [Trakt](https://trakt.tv) cale
 
 ### Installation
 
+> [!NOTE]
+> This plugin is built and tested on [LaraPaper](https://github.com/usetrmnl/larapaper) only. It should work on usetrmnl.com and other TRMNL servers, but it has not been tested there: feedback is welcome in the issues.
+
 1. **Trakt**: on [trakt.tv/oauth/applications/new](https://trakt.tv/oauth/applications/new) (free account), create an app with any redirect URI (e.g. `http://localhost/callback`) and no permissions, then copy its **Client ID** (not the secret).
 2. **TMDB** (optional, for posters): create a free account on [themoviedb.org](https://www.themoviedb.org/signup), then copy the **API Key** (v3) from [Settings → API](https://www.themoviedb.org/settings/api).
 3. **TRMNL (usetrmnl.com)**: create a *Private Plugin* with the *Polling* strategy, then copy:
@@ -115,6 +118,9 @@ Aucun serveur à installer : les premières viennent du calendrier de [Trakt](ht
 | Quart d'écran | Demi horizontal · nouvelles séries |
 
 ### Installation
+
+> [!NOTE]
+> Ce plugin est développé et testé uniquement sur [LaraPaper](https://github.com/usetrmnl/larapaper). Il devrait fonctionner sur usetrmnl.com et les autres serveurs TRMNL, mais il n'y a pas été testé : les retours sont les bienvenus dans les issues.
 
 1. **Trakt** : sur [trakt.tv/oauth/applications/new](https://trakt.tv/oauth/applications/new) (compte gratuit), créez une app avec n'importe quelle URI de redirection (ex. `http://localhost/callback`) et aucune permission, puis copiez son **Client ID** (pas le secret).
 2. **TMDB** (facultatif, pour les affiches) : créez un compte gratuit sur [themoviedb.org](https://www.themoviedb.org/signup), puis copiez la **clé d'API** (v3) depuis [Paramètres → API](https://www.themoviedb.org/settings/api).
