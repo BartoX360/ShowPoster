@@ -16,7 +16,8 @@ custom_fields:
 - keyname: about
   field_type: author_bio
   name: ShowPoster
-  description: "The next new seasons and new series on TV and streaming, drawn as a poster. Data: Trakt; posters: The Movie Database (TMDB). / Les prochaines saisons et nouvelles séries, à la télé et en streaming, façon affiche."
+  description: "The next new seasons and new series on TV and streaming, drawn as a poster. Data: Trakt; posters: The Movie Database (TMDB). / Les prochaines saisons et nouvelles séries, à la télé et en streaming, façon affiche. v1.0.0"
+  github_url: https://github.com/BartoX360/ShowPoster
 - keyname: trakt_id
   field_type: string
   name: Trakt Client ID

@@ -10,7 +10,7 @@
 
 *What to watch next, drawn as a poster.*
 
-A TRMNL plugin that puts one TV series on a poster: the next new seasons and new series, on TV and streaming, with their poster art, their channel or platform and a countdown to the premiere. It is part of the Poster suite with [GamePoster](http://192.168.1.109:3000/Anthony/GamePoster), [FlightPoster](http://192.168.1.109:3000/Anthony/FlightPoster) and [WeatherPoster](http://192.168.1.109:3000/Anthony/WeatherPoster), and shares their look.
+A TRMNL plugin that puts one TV series on a poster: the next new seasons and new series, on TV and streaming, with their poster art, their channel or platform and a countdown to the premiere. It is part of the Poster suite with [FlightPoster](https://github.com/BartoX360/FlightPoster), [WeatherPoster](https://github.com/BartoX360/WeatherPoster), [GamePoster](https://github.com/BartoX360/GamePoster), [MoviePoster](https://github.com/BartoX360/MoviePoster) and [BookPoster](https://github.com/BartoX360/BookPoster)and shares their look.
 
 No server to install: the premieres come from the [Trakt](https://trakt.tv) calendar, and the posters and translated titles from [The Movie Database (TMDB)](https://www.themoviedb.org). Both are free.
 
@@ -49,7 +49,7 @@ No server to install: the premieres come from the [Trakt](https://trakt.tv) cale
 
    The `recipe/src/` folder follows the [trmnlp](https://github.com/usetrmnl/trmnlp) layout.
 
-   **LaraPaper / BYOS**: *Plugins → Import recipe*, pick `recipe/showposter.zip` (built by `recipe_render.sh`, or zip the contents of `recipe/src/`).
+   **LaraPaper / BYOS**: *Plugins → Import recipe*, pick `showposter-x.y.z.zip` from the [latest release](https://github.com/BartoX360/ShowPoster/releases/latest) (or zip the contents of `recipe/src/`).
 4. Fill in your settings, starting with the Trakt Client ID.
 
 ### Settings
@@ -67,11 +67,13 @@ No server to install: the premieres come from the [Trakt](https://trakt.tv) cale
 
 | File | Purpose |
 |---|---|
-| `recipe_render.sh <folder>` | Zips the recipe, imports it into LaraPaper as "ShowPoster (test)", renders every test case and copies the PNGs into `<folder>` |
-| `recipe_test.php` | The test cases (section, rotation, layout, device, language, no TMDB key, errors, missing key) run inside LaraPaper; the TMDB key is taken from the installed plugin |
-| `test_payload.json` | A frozen Trakt premieres calendar (October 20, 2026, 33 days, all countries) and anticipated list used by the test cases |
-| `update.php` | Copies the code of "ShowPoster (test)" into the installed plugin, keeping its settings |
-| `install.php` | First install: imports the recipe as "ShowPoster"; the keys are then entered in its settings |
+| `dev/recipe_render.sh <folder>` | Zips the recipe, imports it into LaraPaper as "ShowPoster (test)", renders every test case and copies the PNGs into `<folder>` |
+| `dev/recipe_test.php` | The test cases (section, rotation, layout, device, language, no TMDB key, errors, missing key) run inside LaraPaper; the TMDB key is taken from the installed plugin |
+| `dev/test_payload.json` | A frozen Trakt premieres calendar (October 20, 2026, 33 days, all countries) and anticipated list used by the test cases |
+| `dev/update.php` | Copies the code of "ShowPoster (test)" into the installed plugin, keeping its settings |
+| `dev/install.php` | First install: imports the recipe as "ShowPoster"; the keys are then entered in its settings |
+
+The scripts target a LaraPaper server running in Docker (container `larapaper-app-1`) over SSH, set with `LARAPAPER_SSH` (e.g. `root@my-server`) in the environment or in `dev/.env` (ignored by git).
 
 ### Notes
 
@@ -87,7 +89,7 @@ No server to install: the premieres come from the [Trakt](https://trakt.tv) cale
 
 *Quelle série regarder ensuite, façon affiche.*
 
-Un plugin TRMNL qui met une série à l'affiche : les prochaines nouvelles saisons et nouvelles séries, à la télé et en streaming, avec leur affiche, leur chaîne ou plateforme et un compte à rebours avant la première diffusion. Il fait partie de la suite Poster avec [GamePoster](http://192.168.1.109:3000/Anthony/GamePoster), [FlightPoster](http://192.168.1.109:3000/Anthony/FlightPoster) et [WeatherPoster](http://192.168.1.109:3000/Anthony/WeatherPoster), dont il reprend le style.
+Un plugin TRMNL qui met une série à l'affiche : les prochaines nouvelles saisons et nouvelles séries, à la télé et en streaming, avec leur affiche, leur chaîne ou plateforme et un compte à rebours avant la première diffusion. Il fait partie de la suite Poster avec [FlightPoster](https://github.com/BartoX360/FlightPoster), [WeatherPoster](https://github.com/BartoX360/WeatherPoster), [GamePoster](https://github.com/BartoX360/GamePoster), [MoviePoster](https://github.com/BartoX360/MoviePoster) et [BookPoster](https://github.com/BartoX360/BookPoster)dont il reprend le style.
 
 Aucun serveur à installer : les premières viennent du calendrier de [Trakt](https://trakt.tv), les affiches et les titres traduits de [The Movie Database (TMDB)](https://www.themoviedb.org). Les deux sont gratuits.
 
@@ -122,7 +124,7 @@ Aucun serveur à installer : les premières viennent du calendrier de [Trakt](ht
    - les `custom_fields` de `recipe/src/settings.yml` dans *Custom fields* (YAML) ;
    - `recipe/src/shared.liquid` dans *Shared markup*, et chaque `recipe/src/<format>.liquid` dans l'onglet correspondant.
 
-   **LaraPaper / BYOS** : *Plugins → Import recipe*, choisissez `recipe/showposter.zip` (créé par `recipe_render.sh`, ou zippez le contenu de `recipe/src/`).
+   **LaraPaper / BYOS** : *Plugins → Import recipe*, choisissez `showposter-x.y.z.zip` dans la [dernière release](https://github.com/BartoX360/ShowPoster/releases/latest) (ou zippez le contenu de `recipe/src/`).
 4. Remplissez les réglages, à commencer par le Client ID Trakt.
 
 ### Réglages
@@ -143,3 +145,9 @@ Aucun serveur à installer : les premières viennent du calendrier de [Trakt](ht
 - En e-ink, les affiches passent en niveaux de gris, tramés par le moteur de rendu.
 - Les titres qui ne s'écrivent pas en alphabet latin sont écartés, faute de glyphes dans les polices.
 - Ce produit utilise l'API TMDB mais n'est ni approuvé ni certifié par TMDB.
+
+---
+
+## Licence / License
+
+Code sous licence [MIT](LICENSE). Les données affichées appartiennent à leurs sources respectives. / Code released under the [MIT](LICENSE) license. The data shown belongs to its respective sources.
